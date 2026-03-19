@@ -40,7 +40,7 @@ class Message(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 def home():
     log.info("Browser opened the UI")
-    with open("index.html", "r") as f:
+    with open("spam.html", "r") as f:
         return f.read()
 
 
