@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spam Detector</title>
+</head>
+<body>
+
+  <h1>Spam Detector</h1>
+
+  <label for="msg">Enter a message:</label><br><br>
+  <textarea id="msg" rows="4" cols="50"></textarea><br><br>
+
+  <button onclick="check()">Check Message</button>
+
+  <br><br>
+
+  <div id="result"></div>
+
+  <script>
+    async function check() {
+      const text = document.getElementById("msg").value;
+
+      if (!text.trim()) {
+        document.getElementById("result").innerText = "Please enter a message.";
+        return;
+      }
+
+      document.getElementById("result").innerText = "Checking...";
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: text })
+        });
+
+        const data = await res.json();
+
+        document.getElementById("result").innerText =
+          "Result: " + data.prediction.toUpperCase() +
+          "\nConfidence: " + data.confidence;
+
+      } catch (err) {
+        document.getElementById("result").innerText = "Error: " + err.message;
+      }
+    }
+  </script>
+
+</body>
+</html>
